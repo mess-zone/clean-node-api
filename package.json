@@ -4,7 +4,14 @@
   "description": "Estudo de criação de uma API Node utilizando Clean Architecture e TDD",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.js": [
+      "standard --fix",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -17,6 +24,8 @@
   },
   "homepage": "https://github.com/mess-zone/clean-node-api#readme",
   "devDependencies": {
+    "husky": "^7.0.0",
+    "lint-staged": "^12.1.7",
     "standard": "^16.0.4"
   }
 }
