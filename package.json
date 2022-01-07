@@ -7,6 +7,9 @@
     "test": "jest",
     "prepare": "husky install"
   },
+  "standard": {
+    "env": ["jest"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mess-zone/clean-node-api.git"
