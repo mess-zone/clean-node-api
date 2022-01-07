@@ -1,0 +1,19 @@
+{
+  "name": "clean-node-api",
+  "version": "1.0.0",
+  "description": "Estudo de criação de uma API Node utilizando Clean Architecture e TDD",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mess-zone/clean-node-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mess-zone/clean-node-api/issues"
+  },
+  "homepage": "https://github.com/mess-zone/clean-node-api#readme"
+}
