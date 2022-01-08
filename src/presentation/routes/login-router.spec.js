@@ -47,6 +47,7 @@ describe('Login Router', () => {
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('email'))
   })
+
   test('Should return 400 if no password is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = {
