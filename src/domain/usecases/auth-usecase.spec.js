@@ -1,15 +1,18 @@
+const { MissingParamError } = require('../../utils/errors')
+
 class AuthUseCase {
   async auth (email) {
     if (!email) {
-      return new Error()
+      throw new MissingParamError('email')
     }
   }
 }
 
 describe('AuthUseCase', () => {
-  test('should throw if no email is provided', async () => {
+  test('should throw MissingParamError if no email is provided', async () => {
     const sut = new AuthUseCase()
-    const promise = sut.auth()
-    expect(promise).rejects.toThrow()
+    await expect(async () => {
+      await sut.auth()
+    }).rejects.toThrow(new MissingParamError('email'))
   })
 })
