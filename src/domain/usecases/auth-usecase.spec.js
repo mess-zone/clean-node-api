@@ -15,6 +15,16 @@ const makeEncrypterSpy = () => {
 
   return encrypterSpy
 }
+
+const makeEncrypterSpyWithError = () => {
+  class EncrypterSpy {
+    async compare () {
+      throw new Error()
+    }
+  }
+  return new EncrypterSpy()
+}
+
 const makeTokenGeneratorSpy = () => {
   class TokenGeneratorSpy {
     async generate (userId) {
@@ -26,6 +36,16 @@ const makeTokenGeneratorSpy = () => {
   const tokenGeneratorSpy = new TokenGeneratorSpy()
   tokenGeneratorSpy.accessToken = 'any_token'
   return tokenGeneratorSpy
+}
+
+const makeTokenGeneratorSpyWithError = () => {
+  class TokenGeneratorSpy {
+    async generate () {
+      throw new Error()
+    }
+  }
+
+  return new TokenGeneratorSpy()
 }
 
 const makeLoadUserByEmailRepositorySpy = () => {
@@ -42,6 +62,16 @@ const makeLoadUserByEmailRepositorySpy = () => {
   }
 
   return loadUserByEmailRepositorySpy
+}
+
+const makeLoadUserByEmailRepositorySpyWithError = () => {
+  class LoadUserByEmailRepositorySpy {
+    async load () {
+      throw new Error()
+    }
+  }
+
+  return new LoadUserByEmailRepositorySpy()
 }
 
 const makeSut = () => {
@@ -144,6 +174,32 @@ describe('AuthUseCase', () => {
         loadUserByEmailRepository,
         encrypter,
         tokenGenerator: invalid
+      })
+    )
+
+    for (let i = 0; i < suts.length; i++) {
+      await expect(async () => {
+        await suts[i].auth('any_email@mail.com', 'any_password')
+      }).rejects.toThrow()
+    }
+  })
+
+  test('should throw if any dependencie throws', async () => {
+    const loadUserByEmailRepository = makeLoadUserByEmailRepositorySpy()
+    const encrypter = makeEncrypterSpy()
+
+    const suts = [].concat(
+      new AuthUseCase({
+        loadUserByEmailRepository: makeLoadUserByEmailRepositorySpyWithError()
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter: makeEncrypterSpyWithError()
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter,
+        tokenGenerator: makeTokenGeneratorSpyWithError()
       })
     )
 
