@@ -84,27 +84,6 @@ describe('AuthUseCase', () => {
     expect(loadUserByEmailRepositorySpy.email).toBe('any_email@mail.com')
   })
 
-  test('should throw if no dependency is provided', async () => {
-    const sut = new AuthUseCase()
-    await expect(async () => {
-      await sut.auth('any_email@mail.com', 'any_password')
-    }).rejects.toThrow()
-  })
-
-  test('should throw if no LoadUserByEmailRepository is provided', async () => {
-    const sut = new AuthUseCase({})
-    await expect(async () => {
-      await sut.auth('any_email@mail.com', 'any_password')
-    }).rejects.toThrow()
-  })
-
-  test('should throw if LoadUserByEmailRepository has no load method', async () => {
-    const sut = new AuthUseCase({ loadUserByEmailRepositorySpy: {} })
-    await expect(async () => {
-      await sut.auth('any_email@mail.com', 'any_password')
-    }).rejects.toThrow()
-  })
-
   test('should return null if an invalid email is provided', async () => {
     const { sut, loadUserByEmailRepositorySpy } = makeSut()
     loadUserByEmailRepositorySpy.user = null
@@ -137,5 +116,41 @@ describe('AuthUseCase', () => {
     const accessToken = await sut.auth('valid_email@mail.com', 'valid_password')
     expect(accessToken).toBe(tokenGeneratorSpy.accessToken)
     expect(accessToken).toBeTruthy()
+  })
+
+  test('should throw if invalid dependencies are provided', async () => {
+    const invalid = {}
+    const loadUserByEmailRepository = makeLoadUserByEmailRepositorySpy()
+    const encrypter = makeEncrypterSpy()
+
+    const suts = [].concat(
+      new AuthUseCase(),
+      new AuthUseCase({}),
+      new AuthUseCase({
+        loadUserByEmailRepository: invalid
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter: invalid
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter,
+        tokenGenerator: invalid
+      })
+    )
+
+    for (let i = 0; i < suts.length; i++) {
+      await expect(async () => {
+        await suts[i].auth('any_email@mail.com', 'any_password')
+      }).rejects.toThrow()
+    }
   })
 })
