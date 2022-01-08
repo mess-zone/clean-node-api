@@ -1,11 +1,7 @@
-// this is a jest __mock__
-const validator = require('validator')
+const EmailValidator = require('./email-validator')
 
-class EmailValidator {
-  isValid (email) {
-    return validator.isEmail(email)
-  }
-}
+// this is a jest __mocks__
+const validator = require('validator')
 
 const makeSut = () => {
   return new EmailValidator()
