@@ -4,11 +4,11 @@
   "description": "Estudo de criação de uma API Node utilizando Clean Architecture e TDD",
   "main": "index.js",
   "scripts": {
-    "test": "jest --silent --colors  --passWithNoTests",
+    "test": "jest --colors  --passWithNoTests",
     "test:unit": "npm test -- --watch --coverage false -c jest-unit.config.js",
     "test:integration": "npm test -- --watch -c jest-integration.config.js",
-    "test:staged": "npm test -- --noStackTrace --findRelatedTests",
-    "test:ci": "npm test -- --coverage",
+    "test:staged": "npm test -- --noStackTrace --findRelatedTests --silent",
+    "test:ci": "npm test -- --coverage --silent",
     "prepare": "husky install"
   },
   "standard": {
