@@ -1,2 +1,4 @@
 node_modules
 coverage
+#jest mongodb in memory
+globalConfig.json
