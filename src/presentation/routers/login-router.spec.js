@@ -152,34 +152,6 @@ describe('Login Router', () => {
     expect(httpResponse.body.accessToken).toEqual(authUseCaseSpy.accessToken)
   })
 
-  test('Should return 500 if AuthUseCase throws', async () => {
-    const authUseCaseSpy = makeAuthUseCaseSpyWithError()
-
-    const sut = new LoginRouter(authUseCaseSpy)
-    const httpRequest = {
-      body: {
-        email: 'any_email@email.com',
-        password: 'any_password'
-      }
-    }
-    const httpResponse = await sut.route(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-  })
-
-  test('Should return 500 if EmailValidator throws', async () => {
-    const authUseCaseSpy = makeAuthUseCaseSpy()
-    const emailValidatorSpy = makeEmailValidatorSpyWithError()
-    const sut = new LoginRouter(authUseCaseSpy, emailValidatorSpy)
-    const httpRequest = {
-      body: {
-        email: 'any_email@email.com',
-        password: 'any_password'
-      }
-    }
-    const httpResponse = await sut.route(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-  })
-
   test('Should calls EmailValidator with correts email', async () => {
     const { sut, emailValidatorSpy } = makeSut()
     const httpRequest = {
@@ -209,6 +181,33 @@ describe('Login Router', () => {
         authUseCase,
         emailValidator: invalid
       })
+    )
+
+    for (const sut of suts) {
+      const httpRequest = {
+        body: {
+          email: 'any_email@email.com',
+          password: 'any_password'
+        }
+      }
+      const httpResponse = await sut.route(httpRequest)
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body).toEqual(new ServerError())
+    }
+  })
+
+  test('should throw if any dependencie throws', async () => {
+    const authUseCase = makeAuthUseCaseSpy()
+
+    const suts = [].concat(
+      new LoginRouter({
+        authUsecase: makeAuthUseCaseSpyWithError()
+      }),
+      new LoginRouter({
+        authUseCase,
+        emailValidator: makeEmailValidatorSpyWithError()
+      })
+
     )
 
     for (const sut of suts) {
