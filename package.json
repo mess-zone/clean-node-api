@@ -1,9 +1,10 @@
 {
   "name": "clean-node-api",
   "version": "1.0.0",
-  "description": "Estudo de criação de uma API Node utilizando Clean Architecture e TDD",
-  "main": "index.js",
+  "description": "Construindo uma API Rest em NodeJS utilizando TDD, Clean Architecture e Sesign Patterns.",
+  "main": "src/main/index.js",
   "scripts": {
+    "start": "node src/main/index.js",
     "test": "jest --colors  --passWithNoTests",
     "test:unit": "npm test -- --watch --coverage false -c jest-unit.config.js",
     "test:integration": "npm test -- --watch -c jest-integration.config.js",
@@ -20,7 +21,7 @@
     "type": "git",
     "url": "git+https://github.com/mess-zone/clean-node-api.git"
   },
-  "author": "",
+  "author": "Gilmar Andrade",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mess-zone/clean-node-api/issues"
@@ -35,6 +36,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.3.0",
     "validator": "^13.7.0"
