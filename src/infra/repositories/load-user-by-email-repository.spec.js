@@ -5,13 +5,7 @@ const { MissingParamError } = require('../../utils/errors')
 let db
 
 const makeSut = () => {
-  const userModel = db.collection('users')
-  const sut = new LoadUserByEmailRepository(userModel)
-
-  return {
-    userModel,
-    sut
-  }
+  return new LoadUserByEmailRepository()
 }
 
 describe('LoadUserByEmail Repository', () => {
@@ -29,18 +23,18 @@ describe('LoadUserByEmail Repository', () => {
   })
 
   test('should return null if no user is found', async () => {
-    const { sut } = makeSut()
+    const sut = makeSut()
     const user = await sut.load('invalid_email@mail.com')
     expect(user).toBeNull()
   })
 
   test('should return an user if user is found', async () => {
-    const { sut, userModel } = makeSut()
+    const sut = makeSut()
     const fakeUser = {
       email: 'valid_email@mail.com',
       password: 'hashed_password'
     }
-    const { insertedId } = await userModel.insertOne(fakeUser)
+    const { insertedId } = await db.collection('users').insertOne(fakeUser)
 
     const user = await sut.load(fakeUser.email)
     expect(user).toEqual({
@@ -49,15 +43,8 @@ describe('LoadUserByEmail Repository', () => {
     })
   })
 
-  test('should throw if no UserModel is provided', async () => {
-    const sut = new LoadUserByEmailRepository()
-    await expect(async () => {
-      await sut.load('any_email@mail.com')
-    }).rejects.toThrow()
-  })
-
   test('should throw if no email is provided', async () => {
-    const { sut } = makeSut()
+    const sut = makeSut()
     await expect(async () => {
       await sut.load()
     }).rejects.toThrow(new MissingParamError('email'))
