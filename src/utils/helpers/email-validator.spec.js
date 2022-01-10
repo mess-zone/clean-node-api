@@ -1,3 +1,11 @@
+jest.mock('validator', () => ({
+  isEmailValid: true,
+  isEmail (email) {
+    this.email = email
+    return this.isEmailValid
+  }
+}))
+
 const EmailValidator = require('./email-validator')
 const { MissingParamError } = require('../errors')
 
