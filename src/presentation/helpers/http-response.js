@@ -4,28 +4,34 @@ module.exports = class HttpResponse {
   static badRequest (error) {
     return {
       statusCode: 400,
-      body: error
+      body: {
+        error: error.message
+      }
+    }
+  }
+
+  static ok (body) {
+    return {
+      statusCode: 200,
+      body
     }
   }
 
   static serverError () {
     return {
       statusCode: 500,
-      body: new ServerError()
+      body: {
+        error: new ServerError().message
+      }
     }
   }
 
   static unauthorizedError () {
     return {
       statusCode: 401,
-      body: new UnauthorizedError()
-    }
-  }
-
-  static ok (data) {
-    return {
-      statusCode: 200,
-      body: data
+      body: {
+        error: new UnauthorizedError().message
+      }
     }
   }
 }
